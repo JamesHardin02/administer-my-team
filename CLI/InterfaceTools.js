@@ -1,5 +1,5 @@
 const inquirer = require('inquirer');
-const { fetch, Request, Response } = require('undici')
+const { fetch } = require('undici')
 
 class InterfaceTools{
   optionsPrompt(){
@@ -32,10 +32,10 @@ class InterfaceTools{
   };
 
   view(table){
-    await fetch(`/api/${table}`)
+    fetch(`http://localhost:3001/api/${table}`)
     .then(response => {
       console.log(`${table} fecthed!`)
-      console.log(response)
+      console.log(Response, Request); 
     })
     .catch(err => {
       console.log(err)
@@ -44,5 +44,3 @@ class InterfaceTools{
 };
 
 module.exports = InterfaceTools
-// control structure for options
-// view all departments fetch(GET) request

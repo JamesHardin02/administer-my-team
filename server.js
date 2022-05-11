@@ -3,7 +3,7 @@ const db = require('./db/connection');
 const apiRoutes = require('./routes/apiRoutes');
 const InterfaceTools = require('./CLI/InterfaceTools');
 
-const PORT = process.env.PORT || 3001;
+const PORT = 3001;
 const app = express();
 
 // Express middleware
@@ -21,10 +21,8 @@ app.use((req, res) => {
 // Start server after DB connection
 db.connect(err => {
   if (err) throw err;
-  console.log('Database connected.');
   app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    new InterfaceTools().optionsPrompt();
   });
 });
 
-new InterfaceTools().optionsPrompt();
