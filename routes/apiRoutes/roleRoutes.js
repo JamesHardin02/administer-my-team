@@ -3,9 +3,9 @@ const router = express.Router();
 const db = require('../../db/connection');
 const cTable = require('console.table');
 
-// GET all departments 
-router.get('/departments', (req, res) => {
-  const sql = `SELECT * FROM department`;
+// GET all roles 
+router.get('/roles', (req, res) => {
+  const sql = `SELECT * FROM role`;
   db.query(sql, (err, rows) => {
     if (err) {
       res.status(500).json({ error: err.message });
