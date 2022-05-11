@@ -1,7 +1,7 @@
 INSERT INTO department (name)
 VALUES
-  ('Front-End Web Development'),
-  ('Back-End Web Development'),
+  ('Front-End Development'),
+  ('Back-End Development'),
   ('Project Management'),
   ('Marketing'),
   ('HR');

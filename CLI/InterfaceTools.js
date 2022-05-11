@@ -35,7 +35,7 @@ class InterfaceTools{
   // GET routes to view console formatted tables 
   view(table){
     fetch(`http://localhost:3001/api/${table}`)
-    .then(response => {
+    .then(() => {
       this.optionsPrompt();
     })
     .catch(err => {
