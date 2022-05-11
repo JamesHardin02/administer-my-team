@@ -17,25 +17,26 @@ class InterfaceTools{
       "exit application"]
     })
     .then(({ action }) => {
-      if (action === 'view all departments') {
-        // GET function for all view options
-        this.view('departments')
+      // "view all" code block
+      if (action === 'view all departments' || 
+      action === "view all roles" || 
+      action === "view all employees") {
+        let table = action.replace('view all ', '');
+        this.view(table);
       };
-      if (action === "view all roles") {};
-      if (action === "view all employees") {};
       if (action === "add a department") {};
       if (action === "add a role") {};
       if (action === "add an employee") {};
       if (action === "and update an employee role") {};
-      if (action === "exit application") {};
+      if (action === "exit application") {console.log("Thank you! Goodbye.")};
     })
   };
 
+  // GET routes to view console formatted tables 
   view(table){
     fetch(`http://localhost:3001/api/${table}`)
     .then(response => {
-      console.log(`${table} fecthed!`)
-      console.log(Response, Request); 
+      this.optionsPrompt();
     })
     .catch(err => {
       console.log(err)
