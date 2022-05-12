@@ -5,18 +5,20 @@ const cTable = require('console.table');
 
 // GET all roles 
 router.get('/employees', (req, res) => {
-  const sql = `SELECT employee.id,
-              employee.first_name,
-              employee.last_name,
+  const sql = `SELECT emp.id,
+              emp.first_name,
+              emp.last_name,
+              man.last_name AS manager,
               role.title,
               role.salary,
               department.name
-              FROM employee
+              FROM employee emp
+              LEFT JOIN employee man
+              ON emp.manager_id = man.id
               LEFT JOIN role
-              ON employee.role_id = role.id
+              ON emp.role_id = role.id
               LEFT JOIN department
-              ON department.id = role.department_id;
-              `;
+              ON department.id = role.department_id;`;
   db.query(sql, (err, rows) => {
     if (err) {
       res.status(500).json({ error: err.message });

@@ -5,7 +5,10 @@ const cTable = require('console.table');
 
 // GET all roles 
 router.get('/roles', (req, res) => {
-  const sql = `SELECT role.*, department.name 
+  const sql = `SELECT role.id,
+              role.title,
+              role.salary,
+              department.name 
               AS department 
               FROM role
               LEFT JOIN department
