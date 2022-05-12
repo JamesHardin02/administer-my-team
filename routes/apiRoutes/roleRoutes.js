@@ -15,7 +15,7 @@ router.get('/roles', (req, res) => {
               ON role.department_id = department.id`;
   db.query(sql, (err, rows) => {
     if (err) {
-      res.status(500).json({ error: err.message });
+      console.log({ error: err.message });
       return;
     };
     res.json({

@@ -11,7 +11,7 @@ router.get('/employees', (req, res) => {
               man.last_name AS manager,
               role.title,
               role.salary,
-              department.name
+              department.name AS department
               FROM employee emp
               LEFT JOIN employee man
               ON emp.manager_id = man.id
@@ -21,7 +21,7 @@ router.get('/employees', (req, res) => {
               ON department.id = role.department_id;`;
   db.query(sql, (err, rows) => {
     if (err) {
-      res.status(500).json({ error: err.message });
+      console.log({ error: err.message });
       return;
     };
     res.json({
