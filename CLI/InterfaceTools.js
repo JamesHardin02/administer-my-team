@@ -48,54 +48,58 @@ class InterfaceTools{
           this.add(table, departmentData);
         });
         } else if (table === "role"){
-          //var departmentsArr = this.departmentQuery();
-          inquirer.prompt([
-          {type: 'text',
-          name: 'name',
-          message: `What is the name of the ${table} being added?`,
-          validate: name => {
-            if (name) {
-              return true;
-            } else {
-              console.log(`You need to enter the ${table}'s name!`);
-              return false;
-            }}
-          },
-          {type: 'text',
-          name: 'salary',
-          message: `What is the salary of the ${table} being added?`,
-          validate: salary => {
-            if (salary.includes(',')) {
-              console.log('The salary cannot include commas!');
-              return false;
-            } else if (typeof Number(salary) !== 'number'){
-              console.log('The salary must be a number!');
-            } else { 
-              return true;
-            }}
-          },
-          {type: 'text',
-          name: 'department',
-          message: `What is the department of the ${table} being added?`,
-          // \n
-          // ----Departments list----\n
-          // ${departmentsArr.map(depo => `${String(depo)}\n`)}
-          validate: department => {
-            if (department) {
-              this.departmentQuery().forEach(depo => {
-                if(depo === department){
-                return true;
-                }
-              })
-            } else {
-              console.log(`You need to enter the ${table}'s department name!`);
-              return false;
-            }}
-          }
-        ])
-        .then(departmentData => {
-          this.add(table, departmentData);
-        });
+          let depoChoices = this.depoChoicesFormat();
+          setTimeout(()=>{
+            inquirer.prompt([
+              {type: 'text',
+              name: 'name',
+              message: `What is the name of the ${table} being added?`,
+              validate: name => {
+                if (name) {
+                  return true;
+                } else {
+                  console.log(`You need to enter the ${table}'s name!`);
+                  return false;
+                }}
+              },
+              {type: 'text',
+              name: 'salary',
+              message: `What is the salary of the ${table} being added?`,
+              validate: salary => {
+                if (salary.includes(',')) {
+                  console.log('The salary cannot include commas!');
+                  return false;
+                } else if (typeof Number(salary) !== 'number'){
+                  console.log('The salary must be a number!');
+                  return false;
+                } else if (!salary){
+                  console.log('The please enter the salary for the role!');
+                  return false;
+                } { 
+                  return true;
+                }}
+              },
+              {type: 'list',
+              name: 'department',
+              message: `What is the department of the ${table} being added?`,
+              choices: depoChoices,
+              validate: department => {
+                if (department) {
+                  if(departmentsArr[i] === department){
+                    return true;
+                  } else {
+                    console.log(`You need to enter a valid department name!`);
+                    return false;} 
+                } else {
+                  console.log(`You need to enter the ${table}'s department name!`);
+                  return false;
+                }}
+              }
+            ])
+            .then(departmentData => {
+              this.add(table, departmentData);
+            });
+          }, 4000);
         } else if (table === "employee"){};
       };
       if (action === "and update an employee role") {};
@@ -103,20 +107,41 @@ class InterfaceTools{
     })
   };
 
-  departmentQuery(){
-    // departments list
-    const sql = `SELECT department.name FROM department`;
-    db.query(sql, (err, rows) => {
-      if (err) {
-        console.log({ error: err.message });
-        return;
+  depoChoicesFormat(){
+    let tools = this;
+    let depoArr;   
+    async function asyncCall(){
+      console.log('loading departments...');
+      depoArr = await tools.depoQuery();
+    };    
+    asyncCall();
+    console.log(depoArr)
+    setTimeout(() => {
+      if(!depoArr.message){
+        const depoChoicesArr = depoArr.map(element => element.name);
+        console.log(depoChoicesArr);
+        return depoChoicesArr;
+      } else {
+        console.log('Error retrieving department choices. Try again.');
       };
-      res.json({
-        message: 'success',
-        data: rows,
+    }, 3000);
+  };
+
+  depoQuery(){
+    return new Promise((resolve, reject) => {
+      const sql = `SELECT department.name FROM department`;
+      db.query(sql, (err, rows) => {
+        if (err) {
+          console.log({ error: err.message });
+          return;
+        };
+        if(rows.length > 0){
+          resolve(rows);
+          return;
+        }else{
+          reject({message: 'No departments found!'});
+        }
       });
-      console.log(rows)
-      return rows;
     });
   };
 
