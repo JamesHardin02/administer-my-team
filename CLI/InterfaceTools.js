@@ -48,49 +48,50 @@ class InterfaceTools{
         .then(departmentData => {
           this.add(table, departmentData);
         });
-        } else if (table === "role"){ 
-          let depoChoices;
-          depoQuery().then(response => {
-            depoChoices = response
-          });
-
-          inquirer.prompt([
-            {type: 'text',
-            name: 'name',
-            message: `What is the name of the ${table} being added?`,
-            validate: name => {
-              if (name) {
-                return true;
-              } else {
-                console.log(`You need to enter the ${table}'s name!`);
-                return false;
-              }}
-            },
-            {type: 'text',
-            name: 'salary',
-            message: `What is the salary of the ${table} being added?`,
-            validate: salary => {
-              if (salary.includes(',')) {
-                console.log('The salary cannot include commas!');
-                return false;
-              } else if (typeof Number(salary) !== 'number'){
-                console.log('The salary must be a number!');
-                return false;
-              } else if (!salary){
-                console.log('The please enter the salary for the role!');
-                return false;
-              } { 
-                return true;
-              }}
-            },
-            {type: 'list',
-            name: 'department',
-            message: `What is the department of the ${table} being added?`,
-            choices: depoChoices
-            }
-          ])
-          .then(departmentData => {
-            this.add(table, departmentData);
+        } else if (table === "role"){
+          depoNameQuery()
+            .then(response => {
+              return response;
+            })
+            .then((depoChoices) => {
+            inquirer.prompt([
+              {type: 'text',
+              name: 'title',
+              message: `What is the title of the ${table} being added?`,
+              validate: title => {
+                if (title) {
+                  return true;
+                } else {
+                  console.log(`You need to enter the ${table}'s title!`);
+                  return false;
+                }}
+              },
+              {type: 'text',
+              name: 'salary',
+              message: `What is the salary of the ${table} being added?`,
+              validate: salary => {
+                if (salary.includes(',')) {
+                  console.log('The salary cannot include commas!');
+                  return false;
+                } else if (typeof Number(salary) !== 'number'){
+                  console.log('The salary must be a number!');
+                  return false;
+                } else if (!salary){
+                  console.log('The please enter the salary for the role!');
+                  return false;
+                } { 
+                  return true;
+                }}
+              },
+              {type: 'list',
+              name: 'department',
+              message: `What is the department of the ${table} being added?`,
+              choices: depoChoices
+              }
+            ])
+            .then(departmentData => {
+              this.add(table, departmentData);
+            });
           });
         } else if (table === "employee"){};
       };

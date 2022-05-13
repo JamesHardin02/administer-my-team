@@ -9,7 +9,7 @@ function depoNameQuery(){
         return;
       };
       if(rows.length > 0){
-        resolve(rows);
+        resolve(rows.map(nameObj => nameObj.name));
         return;
       }else{
         reject({message: 'No departments found!'});
