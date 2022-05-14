@@ -59,7 +59,7 @@ router.post('/role', ({ body }, res) => {
         message: 'success',
         data: body
       });
-      console.log("Role successfully added!", result);
+      console.log("Role successfully added!");
     });
   })
 });

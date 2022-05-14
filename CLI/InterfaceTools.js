@@ -102,7 +102,6 @@ class InterfaceTools{
             });
           });
         } else if (table === "employee") {
-          console.log('here');
           queryRoleTitles().
           then((roleData) =>{
             return roleData

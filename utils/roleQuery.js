@@ -30,7 +30,6 @@ function queryAllRoles(){
 function queryRoleTitles(){
   return new Promise((resolve, reject) => {
     const sql = `SELECT role.title FROM role;`
-    console.log('query')
     db.query(sql, (err, rows) => {
       if (err) {
         console.log({ error: err.message });

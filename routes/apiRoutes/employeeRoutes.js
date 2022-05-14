@@ -3,7 +3,7 @@ const router = express.Router();
 const cTable = require('console.table');
 const db = require('../../db/connection');
 const { queryAllRoles } = require('../../utils/roleQuery');
-const { queryEmployees } = require('../../utils/employeeQuery');
+const { queryIdEmployees } = require('../../utils/employeeQuery');
 const inputCheck = require('../../utils/inputCheck');
 
 // GET all roles 
@@ -51,14 +51,14 @@ router.post('/employee', ({ body }, res) => {
         body.role = roleTable[i].id;
       };
     };
-    return
+    return body
   })
-  .then(() => {return queryEmployees()})
+  .then((body) => {
+    return queryIdEmployees()})
   .then((employeesTable) => {
     for(var i=0; i < employeesTable.length; i++){
       if(employeesTable[i].last_name === body.manager){
         body.manager = employeesTable[i].id;
-        console.log(body.manager, employeesTable[i].id);
       };
     };
     return body;
@@ -67,17 +67,17 @@ router.post('/employee', ({ body }, res) => {
     const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
     VALUES (?,?,?,?)`;
     params = [body.first_name, body.last_name, body.role, body.manager];
-    // db.query(sql, params, (err, result) => {
-    //   if (err) {
-    //     console.log({ error: err.message });
-    //     return;
-    //   }
-    //   res.json({
-    //     message: 'success',
-    //     data: body
-    //   });
-    //   console.log("Role successfully added!", result);
-    // });
+    db.query(sql, params, (err, result) => {
+      if (err) {
+        console.log({ error: err.message });
+        return;
+      }
+      res.json({
+        message: 'success',
+        data: body
+      });
+      console.log("Employee successfully added!");
+    });
   })
   .catch(err => {
     console.log(err);
