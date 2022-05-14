@@ -2,6 +2,8 @@ const res = require('express/lib/response');
 const inquirer = require('inquirer');
 const { fetch } = require('undici');
 const { depoNameQuery } = require('../utils/departmentQuery');
+const { queryRoleTitles } = require('../utils/roleQuery');
+const { queryEmployees } = require('../utils/employeeQuery');
 
 class InterfaceTools{
   optionsPrompt(){
@@ -30,8 +32,14 @@ class InterfaceTools{
       else if (action === "add a department" || 
       action === "add a role" || 
       action === "add an employee") {
+        let table;
         // the table's name being added to
-        let table = action.replace('add a ', '');
+        if (action === "add an employee"){
+          table = action.replace('add an ', '');
+        }else{
+          table = action.replace('add a ', '');
+        };
+
         if (table === "department"){
           inquirer.prompt({
           type: 'text',
@@ -89,11 +97,58 @@ class InterfaceTools{
               choices: depoChoices
               }
             ])
-            .then(departmentData => {
-              this.add(table, departmentData);
+            .then(roleData => {
+              this.add(table, roleData);
             });
           });
-        } else if (table === "employee"){};
+        } else if (table === "employee") {
+          console.log('here');
+          queryRoleTitles().
+          then((roleData) =>{
+            return roleData
+          })
+          .then((roleTitles)=>{
+            queryEmployees()
+            .then(employeeNames => {
+                inquirer.prompt([
+                {type: 'text',
+                name: 'first_name',
+                message: `What is the first name of the ${table} being added?`,
+                validate: first_name => {
+                  if (first_name) {
+                    return true;
+                  } else {
+                    console.log(`You need to enter the ${table}'s first name!`);
+                    return false;
+                  }}
+                },
+                {type: 'text',
+                name: 'last_name',
+                message: `What is the last name of the ${table} being added?`,
+                validate: last_name => {
+                  if (last_name) {
+                    return true;
+                  } else {
+                    console.log(`You need to enter the ${table}'s last name!`);
+                    return false;
+                  }}
+                },
+                {type: 'list',
+                name: 'role',
+                message: `What role is the ${table} working as?`,
+                choices: roleTitles
+                },
+                {type: 'list',
+                name: 'manager',
+                message: `Which employee is the ${table}'s manager? (select NULL if no manager)`,
+                choices: employeeNames
+                }
+              ]).then((employeeData)=>{
+                this.add(table, employeeData);
+              });
+            });
+          });
+        };
       };
       if (action === "and update an employee role") {};
       if (action === "exit application") {console.log("Thank you! Goodbye.")};
