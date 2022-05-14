@@ -84,4 +84,47 @@ router.post('/employee', ({ body }, res) => {
   });
 });
 
+// UPDATE an employee's role
+router.put('/employee', (req, res) => {
+  const errors = inputCheck(req.body, 'employee', 'role');
+  if (errors) {
+    res.status(400).json({ error: errors });
+    return;
+  }
+
+  queryAllRoles()
+  .then((roleTable) => {
+    for(var i=0; i < roleTable.length; i++){
+      if(roleTable[i].title === body.role){
+        body.role = roleTable[i].id;
+      };
+    };
+    return body
+  })
+  .then(body => {
+    // find employee id here
+  })
+  .then((body) => {
+    const sql = `UPDATE employee SET role_id = ? 
+                WHERE id = ?`;
+    const params = [body.employee, body.role];
+    db.query(sql, params, (err, result) => {
+      if (err) {
+        res.status(400).json({ error: err.message });
+        // check if a record was found
+      } else if (!result.affectedRows) {
+        res.json({
+          message: 'Candidate not found'
+        });
+      } else {
+        res.json({
+          message: 'success',
+          data: req.body,
+          changes: result.affectedRows
+        });
+      }
+    });
+  })
+});
+
 module.exports = router;
