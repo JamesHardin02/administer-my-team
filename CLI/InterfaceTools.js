@@ -155,7 +155,7 @@ class InterfaceTools{
                   this.add(table, employeeData);
                 });
               } else {
-                  employeeNames = employeeNames.push('null');
+                  employeeNames.splice(employeeNames.length, 0, 'null');
                   inquirer.prompt([
                   {type: 'text',
                   name: 'first_name',
