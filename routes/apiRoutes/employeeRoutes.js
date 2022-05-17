@@ -95,33 +95,37 @@ router.put('/employee', (req, res) => {
   queryAllRoles()
   .then((roleTable) => {
     for(var i=0; i < roleTable.length; i++){
-      if(roleTable[i].title === body.role){
-        body.role = roleTable[i].id;
+      if(roleTable[i].title === req.body.role){
+        req.body.role = roleTable[i].id;
       };
     };
-    return body
+    return req.body
   })
   .then(body => {
-    // find employee id here
+    return queryIdEmployees();
+  })
+  .then(employeesTable => {
+    for(var i=0; i < employeesTable.length; i++){
+      if(employeesTable[i].last_name === req.body.employee){
+        req.body.employee = employeesTable[i].id;
+      };
+    };
+    return req.body;
   })
   .then((body) => {
     const sql = `UPDATE employee SET role_id = ? 
                 WHERE id = ?`;
-    const params = [body.employee, body.role];
+    const params = [body.role, body.employee];
     db.query(sql, params, (err, result) => {
       if (err) {
         res.status(400).json({ error: err.message });
         // check if a record was found
-      } else if (!result.affectedRows) {
-        res.json({
-          message: 'Candidate not found'
-        });
       } else {
         res.json({
           message: 'success',
           data: req.body,
-          changes: result.affectedRows
         });
+        console.log("Successfully updated employee!")
       }
     });
   })

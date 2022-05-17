@@ -17,7 +17,7 @@ class InterfaceTools{
       "add a department", 
       "add a role",
       "add an employee",
-      "and update an employee role", 
+      "update an employee role", 
       "exit application"]
     })
     .then(({ action }) => {
@@ -149,9 +149,33 @@ class InterfaceTools{
           });
         };
       };
-      if (action === "and update an employee role") {};
+      if (action === "update an employee role") {
+        queryRoleTitles()
+          .then(roleData => {
+            return roleData
+          })
+          .then(roleTitles=>{
+            queryEmployees()
+            .then(employeeNames => {
+                inquirer.prompt([
+                {type: 'list',
+                name: 'employee',
+                message: `Which employee would you like to update?`,
+                choices: employeeNames
+                },
+                {type: 'list',
+                name: 'role',
+                message: `Which of the following is the employee's new role?`,
+                choices: roleTitles
+                }
+              ]).then(updateData => {
+                this.update('employee', updateData);
+              });
+            });
+          });
+      };
       if (action === "exit application") {console.log("Thank you! Goodbye.")};
-    })
+    });
   };
 
   // GET routes to view console formatted tables 
@@ -165,11 +189,27 @@ class InterfaceTools{
     });
   };
 
-  //POST routes for add options
+  // POST routes for add options
   add(table, data){
     fetch(`http://localhost:3001/api/${table}`,
     {
       method: 'POST',
+      body: JSON.stringify(data),
+      headers: { 'Content-Type': 'application/json' }
+    })
+    .then(() => {
+      this.optionsPrompt();
+    })
+    .catch(err => {
+      console.log(err)
+    });
+  };
+
+  // PUT route to update employee's role
+  update(table, data){
+    fetch(`http://localhost:3001/api/${table}`,
+    {
+      method: 'PUT',
       body: JSON.stringify(data),
       headers: { 'Content-Type': 'application/json' }
     })
