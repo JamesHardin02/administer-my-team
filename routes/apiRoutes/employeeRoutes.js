@@ -9,9 +9,8 @@ const inputCheck = require('../../utils/inputCheck');
 // GET all roles 
 router.get('/employees', (req, res) => {
   const sql = `SELECT emp.id,
-              emp.first_name,
-              emp.last_name,
-              man.last_name AS manager,
+              CONCAT(emp.first_name, " ", emp.last_name) AS name,
+              CONCAT(man.first_name, " ", man.last_name) AS manager,
               role.title,
               role.salary,
               department.name AS department
