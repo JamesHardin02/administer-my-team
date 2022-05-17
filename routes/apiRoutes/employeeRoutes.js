@@ -27,7 +27,11 @@ router.get('/employees', (req, res) => {
       return;
     };
     res.json({message: 'success'});
-    console.table(rows);
+    if(rows[0]){
+      console.table(rows);
+    } else {
+      console.log('No employees found')
+    }
   });
 });
 

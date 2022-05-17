@@ -21,7 +21,11 @@ router.get('/roles', (req, res) => {
       return;
     };
     res.json({message: 'success'});
-    console.table(rows);
+    if(rows[0]){
+      console.table(rows);
+    } else {
+      console.log('No roles found')
+    }
   });
 });
 
