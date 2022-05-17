@@ -5,6 +5,8 @@
 - [Installation](#installation)
 - [Features](#features)
 - [Screenshots](#screenshots)
+- [Walkthrough](#walkthrough)
+
 
 ## Description 
 A content management system to organize and keep track of employee information
