@@ -55,6 +55,7 @@ router.post('/employee', ({ body }, res) => {
   .then((body) => {
     return queryIdEmployees()})
   .then((employeesTable) => {
+    body.manager = body.manager.split(' ')[1];
     for(var i=0; i < employeesTable.length; i++){
       if(employeesTable[i].last_name === body.manager){
         body.manager = employeesTable[i].id;

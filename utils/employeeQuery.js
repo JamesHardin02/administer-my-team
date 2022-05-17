@@ -2,14 +2,16 @@ const db = require('../db/connection');
 
 function queryEmployees(){
   return new Promise((resolve, reject) => {
-    const sql = `SELECT last_name FROM employee;`;
+    const sql = `SELECT 
+    CONCAT(emp.first_name, " ", emp.last_name) AS name 
+    FROM employee emp;`;
     db.query(sql, (err, rows) => {
       if (err) {
         console.log({ error: err.message });
         return;
       };
       if(rows.length > 0){
-        resolve(rows.map(nameObj => nameObj.last_name));
+        resolve(rows.map(nameObj => nameObj.name));
         return;
       }else{
         reject({message: 'No employees found!'});
