@@ -105,6 +105,7 @@ router.put('/employee', (req, res) => {
     return queryIdEmployees();
   })
   .then(employeesTable => {
+    req.body.employee = req.body.employee.split(' ')[1];
     for(var i=0; i < employeesTable.length; i++){
       if(employeesTable[i].last_name === req.body.employee){
         req.body.employee = employeesTable[i].id;
