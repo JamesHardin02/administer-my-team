@@ -8,7 +8,9 @@ function depoNameQuery(){
         console.log({ error: err.message });
         return;
       };
+      // if departments exist
       if(rows.length > 0){
+        //return array of department names
         resolve(rows.map(nameObj => nameObj.name));
         return;
       }else{
@@ -26,7 +28,9 @@ function depoAllQuery(){
         console.log({ error: err.message });
         return;
       };
+      //if departments exist
       if(rows.length > 0){
+        //return array of department object rows
         resolve(rows);
         return;
       }else{

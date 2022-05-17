@@ -16,7 +16,9 @@ function queryAllRoles(){
         console.log({ error: err.message });
         return;
       };
+      // if roles exist
       if(rows.length > 0){
+        // return array of role obj rows
         resolve(rows);
         return;
       }else{
@@ -35,7 +37,9 @@ function queryRoleTitles(){
         console.log({ error: err.message });
         return;
       };
+      // if roles exist
       if(rows.length > 0){
+        // return array of role titles
         resolve(rows.map(titleObj => titleObj.title));
         return;
       }else{

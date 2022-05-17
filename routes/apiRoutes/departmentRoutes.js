@@ -12,10 +12,7 @@ router.get('/departments', (req, res) => {
       console.log({ error: err.message });
       return;
     };
-    res.json({
-      message: 'success',
-      data: rows,
-    });
+    res.json({message: 'success'});
     console.table(rows);
   });
 });
@@ -35,10 +32,7 @@ router.post('/department', ({ body }, res) => {
       console.log({ error: err.message });
       return;
     }
-    res.json({
-      message: 'success',
-      data: body
-    });
+    res.json({message: 'success'});
     console.log("Department successfully added");
   });
 });

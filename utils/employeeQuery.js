@@ -10,7 +10,9 @@ function queryEmployees(){
         console.log({ error: err.message });
         return;
       };
+      // if employees exist
       if(rows.length > 0){
+        //return array of employee names
         resolve(rows.map(nameObj => nameObj.name));
         return;
       }else{
@@ -28,7 +30,9 @@ function queryIdEmployees(){
         console.log({ error: err.message });
         return;
       };
+      // if employees exist
       if(rows.length > 0){
+        //return array of department object rows
         resolve(rows);
         return;
       }else{

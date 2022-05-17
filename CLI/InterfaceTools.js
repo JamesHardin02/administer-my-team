@@ -1,5 +1,5 @@
-const res = require('express/lib/response');
 const inquirer = require('inquirer');
+// allows the use of fetch like browser api but in backend
 const { fetch } = require('undici');
 const { depoNameQuery } = require('../utils/departmentQuery');
 const { queryRoleTitles } = require('../utils/roleQuery');
@@ -49,17 +49,20 @@ class InterfaceTools{
             if (name) {
               return true;
             } else {
-              console.log(`You need to enter the ${table}'s name!`);
+              console.log(` You need to enter the ${table}'s name!`);
               return false;
             }}
         })
         .then(departmentData => {
+          // fetches the POST route for department table with data
           this.add(table, departmentData);
         });
         } else if (table === "role"){
+          // queries DB for department names which returns array
+          // of the departments so user can choose depo via list
           depoNameQuery()
-            .then(response => {
-              return response;
+            .then(depoData => {
+              return depoData;
             })
             .then((depoChoices) => {
             inquirer.prompt([
@@ -70,7 +73,7 @@ class InterfaceTools{
                 if (title) {
                   return true;
                 } else {
-                  console.log(`You need to enter the ${table}'s title!`);
+                  console.log(` You need to enter the ${table}'s title!`);
                   return false;
                 }}
               },
@@ -79,13 +82,13 @@ class InterfaceTools{
               message: `What is the salary of the ${table} being added?`,
               validate: salary => {
                 if (salary.includes(',')) {
-                  console.log('The salary cannot include commas!');
+                  console.log(' The salary cannot include commas!');
                   return false;
-                } else if (typeof Number(salary) !== 'number'){
-                  console.log('The salary must be a number!');
+                } else if (isNaN(salary)){
+                  console.log(' The salary must be a number!');
                   return false;
                 } else if (!salary){
-                  console.log('The please enter the salary for the role!');
+                  console.log(' The please enter the salary for the role!');
                   return false;
                 } { 
                   return true;
@@ -98,10 +101,14 @@ class InterfaceTools{
               }
             ])
             .then(roleData => {
+              // fetches the POST route for role table with data
               this.add(table, roleData);
             });
           });
         } else if (table === "employee") {
+          // querys for role titles and employees returns arrays for
+          // list choices for each, so the user can choose which role 
+          // the employee will have and which employee is their manager
           queryRoleTitles().
           then((roleData) =>{
             return roleData
@@ -117,7 +124,7 @@ class InterfaceTools{
                   if (first_name) {
                     return true;
                   } else {
-                    console.log(`You need to enter the ${table}'s first name!`);
+                    console.log(` You need to enter the ${table}'s first name!`);
                     return false;
                   }}
                 },
@@ -128,7 +135,7 @@ class InterfaceTools{
                   if (last_name) {
                     return true;
                   } else {
-                    console.log(`You need to enter the ${table}'s last name!`);
+                    console.log(` You need to enter the ${table}'s last name!`);
                     return false;
                   }}
                 },
@@ -143,6 +150,7 @@ class InterfaceTools{
                 choices: employeeNames
                 }
               ]).then((employeeData)=>{
+                // fetches the POST route for employee table with data
                 this.add(table, employeeData);
               });
             });
@@ -150,6 +158,9 @@ class InterfaceTools{
         };
       };
       if (action === "update an employee role") {
+        // query returns role by title and employees to so
+        // user can choose which employee to update and which role 
+        // to re-assign the employee to
         queryRoleTitles()
           .then(roleData => {
             return roleData
@@ -169,6 +180,7 @@ class InterfaceTools{
                 choices: roleTitles
                 }
               ]).then(updateData => {
+                // fetches the PUT route for employee table with data
                 this.update('employee', updateData);
               });
             });
