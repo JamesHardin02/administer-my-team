@@ -15,8 +15,8 @@ function queryEmployees(){
         //return array of employee names
         resolve(rows.map(nameObj => nameObj.name));
         return;
-      }else{
-        reject({message: 'No employees found!'});
+      } else {
+        resolve(['null']);
       }
     });
   });
@@ -35,9 +35,9 @@ function queryIdEmployees(){
         //return array of department object rows
         resolve(rows);
         return;
-      }else{
-        reject({message: 'No employees found!'});
-      }
+      } else {
+        resolve(['null']);
+      };
     });
   });
 };

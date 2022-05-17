@@ -116,43 +116,84 @@ class InterfaceTools{
           .then((roleTitles)=>{
             queryEmployees()
             .then(employeeNames => {
+              if (employeeNames[0] === 'null'){
                 inquirer.prompt([
-                {type: 'text',
-                name: 'first_name',
-                message: `What is the first name of the ${table} being added?`,
-                validate: first_name => {
-                  if (first_name) {
-                    return true;
-                  } else {
-                    console.log(` You need to enter the ${table}'s first name!`);
-                    return false;
-                  }}
-                },
-                {type: 'text',
-                name: 'last_name',
-                message: `What is the last name of the ${table} being added?`,
-                validate: last_name => {
-                  if (last_name) {
-                    return true;
-                  } else {
-                    console.log(` You need to enter the ${table}'s last name!`);
-                    return false;
-                  }}
-                },
-                {type: 'list',
-                name: 'role',
-                message: `What role is the ${table} working as?`,
-                choices: roleTitles
-                },
-                {type: 'list',
-                name: 'manager',
-                message: `Which employee is the ${table}'s manager? (select NULL if no manager)`,
-                choices: employeeNames
-                }
-              ]).then((employeeData)=>{
-                // fetches the POST route for employee table with data
-                this.add(table, employeeData);
-              });
+                  {type: 'text',
+                  name: 'first_name',
+                  message: `What is the first name of the ${table} being added?`,
+                  validate: first_name => {
+                    if (first_name) {
+                      return true;
+                    } else {
+                      console.log(` You need to enter the ${table}'s first name!`);
+                      return false;
+                    }}
+                  },
+                  {type: 'text',
+                  name: 'last_name',
+                  message: `What is the last name of the ${table} being added?`,
+                  validate: last_name => {
+                    if (last_name) {
+                      return true;
+                    } else {
+                      console.log(` You need to enter the ${table}'s last name!`);
+                      return false;
+                    }}
+                  },
+                  {type: 'list',
+                  name: 'role',
+                  message: `What role is the ${table} working as?`,
+                  choices: roleTitles
+                  },
+                  {type: 'list',
+                  name: 'manager',
+                  message: `Which employee is the ${table}'s manager? (select NULL if no manager)`,
+                  choices: employeeNames
+                  }
+                ]).then((employeeData)=>{
+                  // fetches the POST route for employee table with data
+                  this.add(table, employeeData);
+                });
+              } else {
+                  employeeNames = employeeNames.push('null');
+                  inquirer.prompt([
+                  {type: 'text',
+                  name: 'first_name',
+                  message: `What is the first name of the ${table} being added?`,
+                  validate: first_name => {
+                    if (first_name) {
+                      return true;
+                    } else {
+                      console.log(` You need to enter the ${table}'s first name!`);
+                      return false;
+                    }}
+                  },
+                  {type: 'text',
+                  name: 'last_name',
+                  message: `What is the last name of the ${table} being added?`,
+                  validate: last_name => {
+                    if (last_name) {
+                      return true;
+                    } else {
+                      console.log(` You need to enter the ${table}'s last name!`);
+                      return false;
+                    }}
+                  },
+                  {type: 'list',
+                  name: 'role',
+                  message: `What role is the ${table} working as?`,
+                  choices: roleTitles
+                  },
+                  {type: 'list',
+                  name: 'manager',
+                  message: `Which employee is the ${table}'s manager? (select NULL if no manager)`,
+                  choices: employeeNames
+                  }
+                ]).then((employeeData)=>{
+                  // fetches the POST route for employee table with data
+                  this.add(table, employeeData);
+                });
+              };
             });
           });
         };
